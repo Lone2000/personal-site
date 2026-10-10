@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f6b73c">
+<meta name="description" content="things we could do.">
+
+
+<title>sunshine jar · demo</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>🌞</text></svg>">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Nunito:ital,wght@0,400;0,600;0,800;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="is-locked" data-mood="sun">
+
+
+<section class="lock" id="lock">
+  <div class="lock__sun" aria-hidden="true"></div>
+  <div class="lock__box">
+    <h1 class="lock__title">sunshine jar</h1>
+    <p class="lock__sub">~ only two people know this one.</p>
+    <form class="lock__form" id="lockForm" autocomplete="off">
+      <input class="lock__in" id="lockIn" type="password" placeholder="the secret code"
+             aria-label="the secret code" autocomplete="off" autocapitalize="off"
+             autocorrect="off" spellcheck="false">
+      <button class="lock__go" type="submit" aria-label="unlock">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+      </button>
+    </form>
+    <p class="lock__msg" id="lockMsg" role="status" aria-live="polite"></p>
+  </div>
+</section>
+
+
+<header class="sky" id="sky">
+  <svg class="ridge" viewBox="0 0 1200 320" preserveAspectRatio="none" aria-hidden="true">
+    <circle class="ridge__sun" cx="880" cy="128" r="62"/>
+    <g class="ridge__rays">
+      <path d="M880 20v26M880 210v26M772 128h26M962 128h26M804 52l18 18M938 186l18 18M956 52l-18 18M822 186l-18 18"/>
+    </g>
+    <path class="ridge__far"  d="M0 250 L190 128 L318 214 L470 96 L640 236 L800 150 L980 244 L1200 140 L1200 320 L0 320 Z"/>
+    <path class="ridge__near" d="M0 300 L150 212 L300 292 L520 186 L700 300 L900 220 L1080 300 L1200 246 L1200 320 L0 320 Z"/>
+    <g class="ridge__birds">
+      <path d="M250 92q10-9 19 0q9-9 19 0"/>
+      <path d="M320 66q8-7 15 0q7-7 15 0"/>
+    </g>
+  </svg>
+
+  <div class="sky__bar">
+    <button class="chip chip--me" id="meToggle" type="button">
+      <span class="chip__dot"></span><span id="meName">who's this?</span>
+    </button>
+    <span class="sky__right">
+      <button class="chip chip--bell" id="bell" type="button" hidden
+              data-push="off" aria-label="turn notifications on">
+        <span class="bell__on">🔔</span><span class="bell__off">🔕</span>
+      </button>
+      <button class="chip" id="moodToggle" type="button" aria-label="switch sunshine / dusk">
+        <span class="ic-sun">☀️</span><span class="ic-dusk">🌙</span>
+      </button>
+    </span>
+  </div>
+
+  <div class="sky__copy">
+    <h1 class="sky__title">sunshine jar</h1>
+    <p class="sky__sub">things we said we'd do, and then did.</p>
+  </div>
+
+  <div class="jar" id="jar">
+    <button class="jar__btn" id="pullBtn" type="button">
+      <span class="jar__glass" aria-hidden="true">
+        <span class="jar__lid"></span>
+        <span class="jar__slips"><i></i><i></i><i></i><i></i><i></i></span>
+      </span>
+      <span class="jar__label">pull one out</span>
+    </button>
+    <p class="jar__count" id="jarCount"></p>
+  </div>
+</header>
+
+
+<nav class="tabs" id="tabs">
+  <button class="tab is-on" data-view="board" type="button">the board</button>
+  <button class="tab" data-view="wall" type="button">the wall</button>
+  <button class="tab" data-view="log" type="button">everything</button>
+</nav>
+
+<main class="main">
+  <section class="view is-on" id="view-board">
+    <div class="cats" id="cats"></div>
+    <div class="cork" id="cork"></div>
+    <p class="empty" id="boardEmpty" hidden>the jar's empty. throw something in. ↓</p>
+  </section>
+
+  <section class="view" id="view-wall">
+    <div class="wall" id="wall"></div>
+    <p class="empty" id="wallEmpty" hidden>nothing crossed out yet. go do something.</p>
+  </section>
+
+  <section class="view" id="view-log">
+    <ol class="log" id="log"></ol>
+    <p class="empty" id="logEmpty" hidden>nothing's happened yet.</p>
+  </section>
+</main>
+
+<button class="fab" id="addOpen" type="button" aria-label="throw an idea in">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+</button>
+
+
+<div class="sheet" id="addSheet" hidden>
+  <div class="sheet__scrim" data-close></div>
+  <div class="sheet__box" role="dialog" aria-modal="true" aria-labelledby="addTitle">
+    <button class="sheet__x" type="button" data-close aria-label="close">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <h2 class="sheet__title" id="addTitle">into the jar</h2>
+
+    <form class="form" id="addForm" autocomplete="off">
+      <input class="in" id="addName" maxlength="120" placeholder="what is it"
+             aria-label="what is it" autocomplete="off">
+      <textarea class="in in--tall" id="addBlurb" rows="4" maxlength="500"
+                placeholder="why, where, what to look up first — the references bit"
+                aria-label="the details"></textarea>
+
+      <p class="form__label">file it under</p>
+      <div class="pickcats" id="addCats"></div>
+
+      <button class="go" type="submit" id="addGo">throw it in</button>
+      <p class="msg" id="addMsg" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</div>
+
+
+<div class="sheet sheet--pull" id="pullSheet" hidden>
+  <div class="sheet__scrim" data-close></div>
+  <div class="sheet__box sheet__box--card" role="dialog" aria-modal="true">
+    <div class="pull" id="pullCard"></div>
+    <div class="pull__acts">
+      <button class="go go--ghost" id="pullAgain" type="button">throw it back</button>
+      <button class="go" id="pullTake" type="button">yes. this one.</button>
+    </div>
+    <p class="msg" id="pullMsg" role="status" aria-live="polite"></p>
+  </div>
+</div>
+
+
+<div class="sheet" id="ideaSheet" hidden>
+  <div class="sheet__scrim" data-close></div>
+  <div class="sheet__box sheet__box--tall" role="dialog" aria-modal="true" aria-labelledby="ideaTitle">
+    <button class="sheet__x" type="button" data-close aria-label="close">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+
+    <h2 class="sheet__title" id="ideaTitle"></h2>
+    <p class="idea__meta" id="ideaMeta"></p>
+
+    <div class="pickcats" id="ideaCats"></div>
+
+    <div class="idea__tools">
+      <button class="pill pill--sm" id="ideaEdit" type="button">edit</button>
+      <button class="pill pill--sm pill--danger" id="ideaDelete" type="button">delete</button>
+    </div>
+
+    <ol class="thread" id="thread"></ol>
+
+    <div class="say">
+      <textarea class="in" id="sayText" rows="2" maxlength="600"
+                placeholder="say something about it" aria-label="say something"></textarea>
+      <div class="say__row">
+        <button class="pill" id="sayNote" type="button">note</button>
+        <button class="pill" id="sayDid" type="button">what we did</button>
+        <button class="pill" id="sayFeel" type="button">how it felt</button>
+        <label class="pill pill--file">
+          photo
+          <input type="file" id="sayPhoto" accept="image/*" hidden>
+        </label>
+      </div>
+      <div class="say__row say__row--end">
+        <button class="pill pill--done" id="sayDone" type="button">cross it out</button>
+      </div>
+      <p class="msg" id="sayMsg" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+</div>
+
+
+<div class="sheet" id="catSheet" hidden>
+  <div class="sheet__scrim" data-close></div>
+  <div class="sheet__box" role="dialog" aria-modal="true" aria-labelledby="catTitle">
+    <button class="sheet__x" type="button" data-close aria-label="close">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <h2 class="sheet__title" id="catTitle">categories</h2>
+    <p class="sheet__sub">a way to keep the board readable once there's a lot on it.</p>
+
+    <form class="form form--row" id="catForm" autocomplete="off">
+      <input class="in" id="catName" maxlength="28" placeholder="ideas, food, trips…"
+             aria-label="new category" autocomplete="off">
+      <button class="go" type="submit">make it</button>
+    </form>
+    <p class="msg" id="catMsg" role="status" aria-live="polite"></p>
+
+    <ul class="catlist" id="catList"></ul>
+  </div>
+</div>
+
+
+<div class="sheet sheet--who" id="whoSheet" hidden>
+  <div class="sheet__scrim" data-close></div>
+  <div class="sheet__box sheet__box--small" role="dialog" aria-modal="true" aria-labelledby="whoTitle">
+    <h2 class="sheet__title" id="whoTitle">who's holding the phone?</h2>
+    <div class="who">
+      <button class="who__opt who__opt--a" data-me="a" type="button">
+        <span class="who__face">
+          
+          <svg class="mark mark--sun" viewBox="0 0 64 64" aria-hidden="true">
+            <g class="mark__rays">
+              <path d="M32 2v8M32 54v8M2 32h8M54 32h8M10.9 10.9l5.7 5.7M47.4 47.4l5.7 5.7M53.1 10.9l-5.7 5.7M16.6 47.4l-5.7 5.7"/>
+            </g>
+            <circle class="mark__sun" cx="32" cy="32" r="13.5"/>
+          </svg>
+        </span><span>maya</span>
+      </button>
+      <button class="who__opt who__opt--i" data-me="i" type="button">
+        <span class="who__face">
+          
+          <svg class="mark mark--mtn" viewBox="0 0 64 64" aria-hidden="true">
+            <path class="mark__rock" d="M2 58 L24 23 L35 39 L44 27 L62 58 Z"/>
+            
+            <g class="mark__hat">
+              <ellipse class="mark__brim" cx="24" cy="22.5" rx="17.5" ry="5.4"/>
+              <path class="mark__crown" d="M13 22.5 Q13.6 7.5 24 7.5 Q34.4 7.5 35 22.5 Z"/>
+              <path class="mark__band" d="M13.9 13.4 Q24 16.6 34.1 13.4 L34.5 17.6 Q24 20.8 13.5 17.6 Z"/>
+            </g>
+          </svg>
+        </span><span>theo</span>
+      </button>
+    </div>
+    <p class="who__note">everything you add gets signed with this. it sticks on this phone.</p>
+  </div>
+</div>
+
+<div class="photoview" id="photoView" hidden>
+  <img id="photoBig" alt="">
+</div>
+
+<p class="toast" id="toast" role="status" aria-live="polite" hidden></p>
+
+<script>
+window.DEMO_BAR = { text: "real server routes, running in your browser · localStorage stands in for the git repo",
+  log: true, event: "sun:commit", home: "../", reset: () => window.sunDemo.reset() };
+</script>
+<script src="demo-backend.js"></script>
+<script src="../demo-bar.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

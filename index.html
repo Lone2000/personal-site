@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Irfan Lone · Operations lead, automation engineer, creative developer</title>
+  <meta name="description" content="Muhammad Irfan Lone runs small teams and builds the machine: AI agents and automations that run unattended, and creative web in TypeScript, React and Three.js. Eleven live demos.">
+  <meta name="theme-color" content="#000000">
+  <meta name="author" content="Muhammad Irfan Lone">
+  <link rel="canonical" href="https://irfanlone.pages.dev/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Irfan Lone">
+  <meta property="og:description" content="I run the team and build the machine. Eleven projects you can open and use.">
+  <meta property="og:url" content="https://irfanlone.pages.dev/">
+  <meta property="og:image" content="https://irfanlone.pages.dev/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script>
+    // set the theme before first paint so there is no flash
+    try {
+      var t = localStorage.getItem("il.theme");
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+      document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <div id="root"></div>
+  <noscript>
+    <p style="font-family:system-ui;padding:24px">This page needs JavaScript for its animations. The demos are at
+      <a href="/feels-like-today/">/feels-like-today/</a>, <a href="/starry-post/">/starry-post/</a>,
+      <a href="/sunshine-jar/">/sunshine-jar/</a> and more. Email: lone0059@gmail.com</p>
+  </noscript>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+</html>

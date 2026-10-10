@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <!-- a sealed letter under one big van gogh star. drawn, not exported —
+       an svg icon costs one small request and scales to every launcher. -->
+  <defs>
+    <radialGradient id="sky" cx="50%" cy="38%" r="72%">
+      <stop offset="0%" stop-color="#1c3f7e"/>
+      <stop offset="60%" stop-color="#102a55"/>
+      <stop offset="100%" stop-color="#070f28"/>
+    </radialGradient>
+    <radialGradient id="halo" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#f6dd9c" stop-opacity="0.95"/>
+      <stop offset="45%" stop-color="#e9c469" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#e9c469" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="192" height="192" rx="42" fill="#0a1433"/>
+  <circle cx="96" cy="74" r="86" fill="url(#halo)" opacity="0.55"/>
+
+  <!-- swirl -->
+  <path d="M40 64c14-20 44-24 58-8s4 40-14 40-24-18-12-26 26-2 26 12"
+        fill="none" stroke="#7fb2e0" stroke-width="5" stroke-linecap="round" opacity="0.5"/>
+
+  <!-- the star -->
+  <circle cx="132" cy="50" r="22" fill="url(#halo)"/>
+  <circle cx="132" cy="50" r="7.5" fill="#f6dd9c"/>
+
+  <!-- the envelope -->
+  <g transform="translate(0,6)">
+    <rect x="44" y="104" width="104" height="66" rx="8" fill="#f2e7d0"/>
+    <path d="M44 112l52 34 52-34" fill="none" stroke="#c9a56b" stroke-width="5"
+          stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="96" cy="146" r="12" fill="#a8414f"/>
+    <circle cx="96" cy="146" r="6" fill="none" stroke="#f2e7d0" stroke-width="2" opacity="0.7"/>
+  </g>
+</svg>

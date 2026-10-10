@@ -1,0 +1,14 @@
+{
+  "name": "sunshine jar",
+  "short_name": "sunshine",
+  "description": "things we said we'd do, and then did.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fdf4e3",
+  "theme_color": "#f6b73c",
+  "icons": [
+    { "src": "icon.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" }
+  ]
+}

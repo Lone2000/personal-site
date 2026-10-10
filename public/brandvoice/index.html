@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="BrandVoice demo: a review console for a brand that answers on Reddit as itself. One disclosed account, a human approves every reply, and the guardrails run in your browser.">
+<meta name="theme-color" content="#C49A6C">
+<title>BrandVoice · demo</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='7' width='26' height='18' rx='3' fill='%23F5F2EA' stroke='%2315171C' stroke-width='2'/%3E%3Crect x='7' y='17' width='18' height='4' fill='%23F2B33D'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=JetBrains+Mono:wght@400;600;700&family=Permanent+Marker&family=Special+Elite&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="brandmark">
+    <div class="tape-title">BrandVoice</div>
+    <p class="tagline">Every reply says <em>who's talking.</em></p>
+  </div>
+  <div class="status" aria-label="session status">
+    <span class="pill" id="whoPill"><span class="dot"></span><span class="lbl">posting as</span> <b class="who-acc" id="whoAcc">u/acme_water_official</b>&nbsp;· Acme Water</span>
+    <label class="pill switch" title="Simulates .env holding a different account's login">
+      <input type="checkbox" id="undeclared"> use an undeclared account
+    </label>
+    <span class="pill"><span id="clock">Tue 13 Oct · 09:00 UTC</span><button class="btn small" id="ffBtn" type="button" title="Advance the demo clock one hour">fast-forward 1h</button></span>
+    <span class="pill" id="pacePill" aria-live="polite"></span>
+  </div>
+  <div class="top-actions">
+    <button class="btn primary" id="tourBtn" type="button">▶ <span class="long">Run the scripted tour</span><span class="short">Scripted tour</span></button>
+    <button class="btn" id="testsBtn" type="button"><span class="long">Run guardrail tests</span><span class="short">Guardrail tests</span></button>
+  </div>
+</header>
+
+<div class="config-error" id="configError" hidden><div role="alert"><b>REFUSED</b><p id="configErrorText"></p></div></div>
+
+<div class="hint-wrap" id="hintWrap">
+  <aside class="hint" id="hint" aria-label="try this">
+    <h2>try this</h2>
+    <ol>
+      <li data-step="post">Press <kbd>a</kbd> to approve, then <kbd>p</kbd> to post.</li>
+      <li data-step="pace">Post the next draft: the pace limit refuses. Fast-forward 1h.</li>
+      <li data-step="footer">Press <kbd>e</kbd>, delete the footer, save. It goes right back on.</li>
+      <li data-step="perm">r/HomeImprovementQs needs a mod's yes: record it.</li>
+    </ol>
+    <button class="x" type="button" id="hintClose" aria-label="hide hints">×</button>
+  </aside>
+</div>
+
+<main class="grid">
+  <div class="col-left">
+    <section class="card queue" aria-labelledby="qh">
+      <div class="card-head"><h2 id="qh">Review queue</h2></div>
+      <p class="sub" id="queueSub"></p>
+      <ol id="queue"></ol>
+      <details class="filtered" id="filtered"><summary></summary><ul></ul></details>
+    </section>
+    <section class="card communities" aria-labelledby="ch">
+      <div class="card-head"><h2 id="ch">Communities</h2><button class="btn small" id="checkRulesBtn" type="button">check-rules</button></div>
+      <p class="sub">Needs a rule-scan pass <b>and</b> a logged mod permission.</p>
+      <div id="subs"></div>
+    </section>
+  </div>
+
+  <section class="col-mid console" id="review" aria-live="polite" aria-label="review console"></section>
+
+  <section class="col-right" aria-label="demo log">
+    <div class="term">
+      <div class="term-bar">
+        <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="title">~/brandvoice</span>
+        <div class="tabs" role="tablist">
+          <button role="tab" aria-selected="true" data-tab="log" type="button">log</button>
+          <button role="tab" aria-selected="false" data-tab="audit" type="button">audit trail</button>
+        </div>
+      </div>
+      <div class="term-note" id="termNote">What BrandVoice would send to the Reddit API. Nothing leaves this page.</div>
+      <div class="term-body" id="termBody" tabindex="0"></div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">BrandVoice · private repo · demo with sample data</footer>
+
+<dialog class="tests" id="testsDlg" aria-labelledby="testsTitle">
+  <div class="tests-inner">
+    <div class="tests-head">
+      <h2 id="testsTitle">guardrail tests</h2>
+      <button class="btn small" id="testsRerun" type="button">run again</button>
+      <button class="btn small" id="testsClose" type="button">close</button>
+    </div>
+    <div class="tests-body" id="testsBody"></div>
+  </div>
+</dialog>
+
+<div class="tourcap" id="tourCap" hidden role="status" aria-live="polite">
+  <span class="n" id="tourN"></span><p id="tourText"></p>
+  <button class="btn small" id="tourStop" type="button">stop</button>
+</div>
+<div class="toast" id="toast" hidden role="status"></div>
+
+<script src="./guardrails.js"></script>
+<script src="./tests.js"></script>
+<script src="./data.js"></script>
+<script>
+window.DEMO_BAR = { text: "Guardrails are the real logic, ported from Python · Reddit, the drafts and the clock are simulated · nothing is posted", log: true,
+  event: "demo:commit", logTitle: "WHAT BRANDVOICE WROTE (AUDIT + REDDIT API)", home: "../",
+  reset: () => { try { localStorage.removeItem("brandvoice-demo:v1"); localStorage.removeItem("brandvoice-demo:hint"); } catch (e) {} location.reload(); } };
+</script>
+<script src="../demo-bar.js"></script>
+<script src="./app.js"></script>
+</body>
+</html>

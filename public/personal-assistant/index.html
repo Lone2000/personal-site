@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Personal Assistant · second-opinion demo</title>
+<meta name="description" content="A second opinion that shows its work: options, your view, odds and receipts, scored live from an editable memory profile.">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<div class="sky" aria-hidden="true"><i class="hill h1"></i><i class="hill h2"></i><i class="hill h3"></i></div>
+
+<header class="top">
+  <div class="stars" aria-hidden="true"></div>
+  <div class="brand">
+    <h1>Personal <i>Assistant</i></h1>
+    <p>a second opinion that shows its work</p>
+  </div>
+  <ol class="stepper" id="stepper" aria-label="Method">
+    <li data-step="1"><b>1</b><span>Options</span></li>
+    <li data-step="2"><b>2</b><span>Your view</span></li>
+    <li data-step="3"><b>3</b><span>Odds</span></li>
+    <li data-step="4"><b>4</b><span>Receipts</span></li>
+  </ol>
+  <button type="button" class="tourbtn" id="tourBtn">Run the tour</button>
+</header>
+
+<main class="app">
+  <!-- conversation -->
+  <section class="convo pane" aria-label="Decision chat">
+    <div class="intro">
+      <p class="lede">I'm Sam's second opinion. I hold <b id="factCount">20 facts</b> about Sam. Bring me a decision.</p>
+      <ol class="try">
+        <li><b>1</b>Pick a decision</li>
+        <li><b>2</b>Say which way you lean</li>
+        <li><b>3</b>Switch a memory off and watch the odds move</li>
+      </ol>
+    </div>
+    <div class="picker" id="picker" role="group" aria-label="Decisions"></div>
+    <div class="thread" id="thread" aria-live="polite"></div>
+    <form class="composer" id="composer" autocomplete="off">
+      <label class="sr" for="ask">Ask about a decision</label>
+      <input id="ask" type="text" placeholder="…or type it: “should I move for a job?”">
+      <button type="submit">Ask</button>
+    </form>
+  </section>
+
+  <!-- the fork -->
+  <section class="forkpane pane" aria-label="Options and odds">
+    <div class="fork-h"><span class="k">THE FORK</span><span id="forkTitle">waiting for a decision</span></div>
+    <div class="signs-wrap" id="signsWrap">
+      <svg class="road" id="road" aria-hidden="true"></svg>
+      <div class="you" id="you" aria-hidden="true"></div>
+      <div class="signs" id="signs"></div>
+    </div>
+  </section>
+
+  <!-- memory -->
+  <aside class="mem pane" id="mem" aria-label="Sam's memory">
+    <div class="mem-h">
+      <div><span class="k">SAM'S MEMORY</span><span class="cnt" id="memCnt"></span></div>
+      <p>Switch = remember / forget. Underlined values are editable.</p>
+    </div>
+    <div class="mem-list" id="memList"></div>
+  </aside>
+</main>
+
+<footer class="foot">Personal Assistant · private repo · demo with sample data</footer>
+
+<div class="tourcap" id="tourCap" hidden><span id="tourTxt"></span><button type="button" id="tourStop">stop</button></div>
+<button type="button" class="backpill" id="backPill" hidden>back to the odds</button>
+
+<script>
+window.DEMO_BAR = { text: "Scoring and memory are real JS over a fictional profile (Sam); the assistant's wording is scripted.", log: true,
+  event: "demo:commit", logTitle: "WHAT THE ASSISTANT READ & WROTE", logLabel: "log", home: "../",
+  reset: () => { try { localStorage.removeItem("pa-demo:v1"); } catch (e) {} location.reload(); } };
+</script>
+<script src="../demo-bar.js"></script>
+<script src="./app.js"></script>
+</body>
+</html>

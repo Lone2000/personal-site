@@ -1,0 +1,19 @@
+{
+  "name": "starry post",
+  "short_name": "starry post",
+  "description": "letters, sealed in the browser, under a generated sky",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0a1433",
+  "theme_color": "#0a1433",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

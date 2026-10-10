@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PCI DSS Control Extractor · interactive demo</title>
+<meta name="description" content="296 scanned PCI DSS pages to one clean CSV. Replay the Claude Haiku vision pipeline page by page, then search and export all 328 extracted controls.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23100F0D'/%3E%3Crect x='8' y='6' width='16' height='20' rx='1.5' fill='%23EEE6D3'/%3E%3Crect x='6' y='15' width='20' height='2.4' fill='%23E8B04B'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,800;1,9..144,300&family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="paperNoise"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="7"/><feColorMatrix values="0 0 0 0 .32 0 0 0 0 .29 0 0 0 0 .25 0 0 0 .9 0"/></filter>
+</svg>
+
+<div class="wrap">
+  <header class="hero">
+    <p class="kicker">Scanned standard in · clean CSV out</p>
+    <h1>PCI DSS <i>Control</i> Extractor</h1>
+    <p class="lede">The PCI DSS v4.0.1 standard is 296 image-only pages: not one line you can copy. This Python pipeline hands each page image to <b>Claude Haiku</b> vision, parses the pipe-delimited lines it writes back, merges controls that run across a page break, saves progress after every page, and writes one import-ready CSV.</p>
+    <div class="hero__cta">
+      <button class="btn btn--primary btn--lg pulse" id="heroRun" type="button"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z" fill="currentColor"/></svg>Run the pipeline replay</button>
+      <button class="btn btn--lg btn--ghost" id="heroTour" type="button">Autoplay tour</button>
+    </div>
+    <ol class="try" aria-label="Try this">
+      <li><span>1</span>Press <b>Run</b> to replay six real pages</li>
+      <li><span>2</span>Watch <b>1.2.4</b> merge across the page break</li>
+      <li><span>3</span>Search all 328 rows and <b>export the CSV</b></li>
+    </ol>
+    <dl class="stats">
+      <div><dt>pages in</dt><dd>296</dd></div>
+      <div><dt>controls out</dt><dd>328</dd></div>
+      <div><dt>API cost</dt><dd>~$0.40</dd></div>
+      <div><dt>frameworks</dt><dd>3</dd></div>
+    </dl>
+  </header>
+
+  <!-- ─────────────── 01 PIPELINE REPLAY ─────────────── -->
+  <section class="sec" id="replay" aria-labelledby="h-replay">
+    <div class="sec__head">
+      <p class="sec__num">01</p>
+      <div>
+        <h2 id="h-replay">Pipeline replay</h2>
+        <p class="sec__sub">Pages 36–41, the start of Requirement 1. The model's replies are replayed; the parser, the merge and the CSV writer are the project's Python ported line for line and running here.</p>
+      </div>
+    </div>
+
+    <div class="console">
+      <div class="console__bar">
+        <div class="ctrls">
+          <button class="btn btn--primary" id="runBtn" type="button"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z" fill="currentColor"/></svg><span>Run 6 pages</span></button>
+          <button class="btn" id="stepBtn" type="button">Next page</button>
+          <button class="btn" id="stopBtn" type="button" disabled title="Interrupt mid-page, like Ctrl+C. The checkpoint keeps every finished page.">Interrupt</button>
+          <button class="btn btn--ghost" id="tourBtn" type="button">Autoplay tour</button>
+        </div>
+        <dl class="meters" aria-live="polite">
+          <div><dt>page</dt><dd><span id="mPage">–</span><small>/296</small></dd></div>
+          <div><dt>controls</dt><dd id="mCtl">0</dd></div>
+          <div><dt>tokens</dt><dd id="mTok">0</dd></div>
+          <div><dt>est. cost</dt><dd id="mCost">$0.000</dd></div>
+        </dl>
+      </div>
+
+      <div class="console__grid">
+        <figure class="scan">
+          <figcaption class="pane-t"><span>page image</span><span id="pageName">page_036.png</span></figcaption>
+          <div class="scan__stage">
+            <div class="paper" id="paper" aria-label="Stylised scanned page"></div>
+          </div>
+          <p class="scan__note">Drawn for the demo. On the real page the text is pixels; there is nothing to select.</p>
+        </figure>
+
+        <div class="term">
+          <div class="pane-t"><span>stdout · claude-haiku-4-5 replies</span><span id="termStatus">idle</span></div>
+          <div class="term__body" id="term" tabindex="0" aria-label="Pipeline output">
+            <p class="term__hint">$ python scripts/extract_pci_full.py<br>Found 296 pages in temp/pdf_pages<br><span class="dim">Press Run. Each page: render → Haiku → parse → merge → checkpoint.</span></p>
+          </div>
+          <div class="ckpt"><span class="ckpt__k">temp/progress.json</span><code id="ckpt">{ "last_page": -1, "controls": {} }</code></div>
+        </div>
+      </div>
+
+      <div class="out">
+        <div class="pane-t"><span>controls{} → write_csv()</span><span id="outStatus">0 rows</span></div>
+        <div class="out__head" aria-hidden="true"><span>Control ID</span><span>Identifier</span><span>Control Description</span><span>Implementation Guidance</span></div>
+        <ol class="out__rows" id="outRows"></ol>
+        <div class="out__empty" id="outEmpty">Rows appear here as each page is parsed. Sorted the way the script sorts them: 1.2.3 numerically, appendix A1.x after 12.x.</div>
+        <div class="out__done" id="outDone" hidden>
+          <p id="doneMsg"></p>
+          <div class="out__acts">
+            <button class="btn" id="dlReplay" type="button">Download these rows as CSV</button>
+            <a class="btn btn--primary" href="#explorer" id="toExplorer">Open all 328 rows ↓</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────── 02 CONTROLS EXPLORER ─────────────── -->
+  <section class="sec" id="explorer" aria-labelledby="h-exp">
+    <div class="sec__head">
+      <p class="sec__num">02</p>
+      <div>
+        <h2 id="h-exp">Controls explorer</h2>
+        <p class="sec__sub">The full output, <code>output/PCI_DSS_v4_Controls.csv</code>, exactly as the pipeline wrote it, nothing cleaned up. The same pipeline produced two more frameworks in the same schema.</p>
+      </div>
+    </div>
+
+    <div class="fw" role="list">
+      <div class="fw__card is-on" role="listitem">
+        <p class="fw__n">328</p><p class="fw__nm">PCI DSS v4.0.1</p>
+        <p class="fw__d">296 scanned pages · Haiku vision · browsable below</p>
+      </div>
+      <div class="fw__card" role="listitem">
+        <p class="fw__n">123</p><p class="fw__nm">HIPAA</p>
+        <p class="fw__d">Security &amp; Privacy Rule · same CSV schema · not in this demo</p>
+      </div>
+      <div class="fw__card" role="listitem">
+        <p class="fw__n">164</p><p class="fw__nm">NIS2</p>
+        <p class="fw__d">ENISA guidance · same CSV schema · not in this demo</p>
+      </div>
+    </div>
+
+    <div class="tools">
+      <label class="search">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M13 13l4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <input id="q" type="search" placeholder="Search 328 controls: try “encryption” or 8.3" autocomplete="off" spellcheck="false" aria-label="Search controls">
+        <kbd>/</kbd>
+      </label>
+      <button class="btn btn--primary" id="exportBtn" type="button"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v8m0 0L4.8 6.8M8 10l3.2-3.2M3 13h10" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="exportLbl">Export CSV · 328 rows</span></button>
+    </div>
+    <div class="chips" id="chips" role="toolbar" aria-label="Filter by requirement"></div>
+
+    <div class="xp">
+      <div class="xp__list">
+        <p class="xp__count" id="count" aria-live="polite"></p>
+        <ol class="rows" id="rows"></ol>
+      </div>
+      <aside class="detail" id="detail" aria-label="Control detail" aria-hidden="true">
+        <div class="detail__in" id="detailIn"></div>
+      </aside>
+    </div>
+    <div class="scrim" id="scrim" hidden></div>
+  </section>
+
+  <footer class="foot">
+    <p>PCI DSS Control Extractor · source: <a href="https://github.com/Lone2000/pci-dss-control-extractor" rel="noopener">github.com/Lone2000/pci-dss-control-extractor</a></p>
+    <p class="dim">Control text from the PCI DSS v4.0.1 standard (PCI Security Standards Council), as extracted in the public repo. Cost shown is the README's ~$0.40 full-run estimate, pro-rated per page.</p>
+  </footer>
+</div>
+
+<script>
+window.DEMO_BAR = { text: "Parser, page-merge, checkpoint and CSV writer are the real Python logic ported to JS. Haiku's page replies are replayed from the real extracted rows.", log: true,
+  event: "demo:commit", logTitle: "PIPELINE LOG — WHAT THE PYTHON RUN WOULD PRINT", logLabel: "log", logEmpty: "nothing yet. Press Run.", home: "../",
+  reset: () => { try { Object.keys(localStorage).filter(k => k.startsWith("pcix.")).forEach(k => localStorage.removeItem(k)); } catch (e) {} location.reload(); } };
+</script>
+<script src="../demo-bar.js"></script>
+<script src="./app.js"></script>
+</body>
+</html>
