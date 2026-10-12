@@ -35,7 +35,7 @@ export const PROFILE =
   "myself: AI agents that do the slow work while a person stays in charge, and creative web in TypeScript, " +
   "React and Three.js.";
 
-export const EMAIL = "lone0059@gmail.com";
+export const EMAIL = "contact@irfanlone.com";
 export const LINKS = {
   github: "https://github.com/Lone2000",
   linkedin: "https://www.linkedin.com/in/muhammad-irfan-lone",
