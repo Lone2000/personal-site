@@ -453,7 +453,12 @@ export function Ledger() {
                 <h3 className="text-[1.2rem] font-bold leading-tight [font-stretch:84%]">
                   {r.title} <span className="text-accent">· {r.org}</span>
                 </h3>
-                <p className="mt-1 text-[13px] italic text-muted">{r.place}</p>
+                <p className="mt-1 text-[13px] text-muted">
+                  <span className="italic">{r.place}</span>
+                  <span className="ml-2 rounded-sm border border-line px-1.5 py-0.5 text-[11px] font-semibold tracking-wide text-faint uppercase not-italic">
+                    {r.type}
+                  </span>
+                </p>
                 <ul className="mt-4 grid gap-2.5">
                   {r.points.map((pt) => (
                     <li key={pt} className="relative max-w-[70ch] pl-5 text-[15px] leading-relaxed before:absolute before:left-0 before:top-[0.62em] before:text-accent before:content-['•']">

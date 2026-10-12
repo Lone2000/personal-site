@@ -223,16 +223,33 @@ export interface Role {
   title: string;
   org: string;
   place: string;
+  /** employment type, e.g. "Full-time" or "Contract" */
+  type: string;
   start: string;
   end: string;
   points: string[];
 }
 
+/** Current role first. Vectra View ended in Sep 2026 and was a contract. */
 export const ROLES: Role[] = [
+  {
+    title: "Marketing Manager, Outbound and Automation",
+    org: "Revvye",
+    place: "Dubai, remote",
+    type: "Full-time",
+    start: "Jul 2025",
+    end: "Now",
+    points: [
+      "Lead a team of three against daily targets. Tripled monthly outreach, from 1,000 to 3,000 contacts, without adding people.",
+      "Built the KPI dashboards and report results to leadership every week.",
+      "Built an n8n system of one orchestrator and eight sub-workflows that qualifies accounts and leads and writes everything back to Notion.",
+    ],
+  },
   {
     title: "Software Operations Manager",
     org: "Vectra View",
     place: "Cybersecurity SaaS, USA, remote",
+    type: "Contract",
     start: "Dec 2025",
     end: "Sep 2026",
     points: [
@@ -243,21 +260,10 @@ export const ROLES: Role[] = [
     ],
   },
   {
-    title: "Marketing Manager, Outbound and Automation",
-    org: "Revvye",
-    place: "Dubai, remote",
-    start: "Jul 2025",
-    end: "Now",
-    points: [
-      "Lead a team of three against daily targets. Tripled monthly outreach, from 1,000 to 3,000 contacts, without adding people.",
-      "Built the KPI dashboards and report results to leadership every week.",
-      "Built an n8n system of one orchestrator and eight sub-workflows that qualifies accounts and leads and writes everything back to Notion.",
-    ],
-  },
-  {
     title: "PHP and WordPress Developer, Project Coordinator",
     org: "BlackBoardd",
     place: "Remote",
+    type: "Full-time",
     start: "Mar 2024",
     end: "Jul 2025",
     points: [

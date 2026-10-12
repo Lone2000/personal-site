@@ -333,7 +333,7 @@ export function Reel() {
               </p>
               <div>
                 <h3 className="text-[1.25rem] leading-tight font-bold [font-stretch:78%]">{r.title}</h3>
-                <p className="mt-1 text-[14px] text-muted">{r.org}, {r.place}</p>
+                <p className="mt-1 text-[14px] text-muted">{r.org}, {r.place} · {r.type}</p>
                 <ul className="mt-4 grid gap-2.5">
                   {r.points.map((pt) => (
                     <li key={pt} className="max-w-[72ch] text-[15px] leading-relaxed text-muted">{pt}</li>

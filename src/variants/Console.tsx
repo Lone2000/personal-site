@@ -290,7 +290,7 @@ export function Console() {
                   <time>{r.start}</time> → <time>{r.end}</time>
                 </p>
               </div>
-              <p className="mt-1 text-[12px] text-faint">{r.place}</p>
+              <p className="mt-1 text-[12px] text-faint">{r.place} · {r.type.toLowerCase()}</p>
               <ul className="mt-4 grid gap-2">
                 {r.points.map((pt) => (
                   <li key={pt} className="grid grid-cols-[1.1rem_1fr] gap-1 text-[13px] leading-relaxed text-muted">

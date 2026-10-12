@@ -27,7 +27,7 @@ export function Experience() {
               </p>
               <div>
                 <h3 className="t-h3">{r.title}</h3>
-                <p className="mt-1 text-muted">{r.org}, {r.place}</p>
+                <p className="mt-1 text-muted">{r.org}, {r.place} · {r.type}</p>
                 <ul className="mt-4 grid gap-3">
                   {r.points.map((pt) => (
                     <li key={pt} className="relative max-w-[66ch] pl-5 text-[16px] leading-relaxed before:absolute before:left-0 before:top-[0.7em] before:h-px before:w-2.5 before:bg-faint">
