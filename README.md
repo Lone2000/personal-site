@@ -1,4 +1,4 @@
-# irfanlone.pages.dev
+# irfanlone.com
 
 Personal site for Muhammad Irfan Lone: the portfolio home page plus nine live demos and their launch videos.
 
@@ -11,25 +11,25 @@ Personal site for Muhammad Irfan Lone: the portfolio home page plus nine live de
 npm install
 npm run dev       # http://localhost:5173
 npm run build     # type-checks, then writes dist/
-npm run preview   # serves dist/ the way Cloudflare will
+npm run preview   # serves dist/ the way the host will
 ```
 
 Node 20 or newer.
 
-## Deploy to Cloudflare Pages from GitHub
+## Deploy (Hostinger, from GitHub)
 
 1. Push this folder to a GitHub repository.
-2. In Cloudflare, go to **Workers & Pages → Create → Pages → Connect to Git** and pick the repository.
+2. Hostinger is connected to this repository and deploys `main` automatically. Build `npm run build`, output `dist`.
 3. Use these build settings:
    - Framework preset: **Vite** (or None)
    - Build command: `npm run build`
    - Build output directory: `dist`
    - Environment variable: `NODE_VERSION` = `22`
-4. Name the project `irfanlone` to get **https://irfanlone.pages.dev**. That address is printed on the résumé and set in `index.html` (`canonical`, `og:url`, `og:image`). If you use another name, update those three tags.
+4. Name the project `irfanlone` to get **https://irfanlone.com**. That address is printed on the résumé and set in `index.html` (`canonical`, `og:url`, `og:image`). If you use another name, update those three tags.
 
 Every push to the main branch redeploys. Pull requests get preview URLs.
 
-`public/_headers` sets security headers and long caching for videos and hashed assets. Every file is under Cloudflare's 25 MB limit; the largest is the PCI video at 11.7 MB.
+`public/_headers` sets security headers and long caching for videos and hashed assets. `public/.htaccess` is what Hostinger reads; `public/_headers` is the Cloudflare equivalent, kept in step but inert here.
 
 ## Where things live
 

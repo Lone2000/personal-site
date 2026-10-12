@@ -15,10 +15,25 @@ export interface Project {
   href: string;
   external?: boolean;
   repo?: string;
+  /** the art-directed launch film */
   video?: string;
   poster: string;
+  /** a plain walkthrough of the real thing, where one was shot. Shown first,
+   *  because it answers "what is this" faster than the launch film does. */
+  demoVideo?: string;
+  demoPoster?: string;
   note?: string;
 }
+
+export const NAME = "Muhammad Irfan Lone";
+/** the role line from the Tekavra résumé variant */
+export const ROLE_LINE = "Creative developer · TypeScript, React, Three.js · Automation and AI agents";
+export const LOCATION = "Remote · EU/UK hours";
+/** the hero lede, shared by every design variant */
+export const PROFILE =
+  "Operations lead and automation engineer. I write the spec, keep a small team on it, and then build the thing " +
+  "myself: AI agents that do the slow work while a person stays in charge, and creative web in TypeScript, " +
+  "React and Three.js.";
 
 export const EMAIL = "lone0059@gmail.com";
 export const LINKS = {
@@ -28,7 +43,7 @@ export const LINKS = {
   resume: "/resume.pdf",
 };
 
-export const PROJECTS: Project[] = [
+const ALL: Project[] = [
   {
     slug: "feels-like-today",
     name: "Feels Like Today",
@@ -144,6 +159,8 @@ export const PROJECTS: Project[] = [
     repo: "pci-dss-control-extractor",
     video: "/videos/pci-dss-control-extractor.mp4",
     poster: "/videos/pci-dss-control-extractor.jpg",
+    demoVideo: "/videos/pci-dss-control-extractor-demo.mp4",
+    demoPoster: "/videos/pci-dss-control-extractor-demo.jpg",
   },
   {
     slug: "brandvoice",
@@ -158,6 +175,8 @@ export const PROJECTS: Project[] = [
     href: "/brandvoice/",
     video: "/videos/brandvoice.mp4",
     poster: "/videos/brandvoice.jpg",
+    demoVideo: "/videos/brandvoice-demo.mp4",
+    demoPoster: "/videos/brandvoice-demo.jpg",
   },
   {
     slug: "personal-assistant",
@@ -187,7 +206,17 @@ export const PROJECTS: Project[] = [
     repo: "grind-bot",
     video: "/videos/grind-bot.mp4",
     poster: "/videos/grind-bot.jpg",
+    demoVideo: "/videos/grind-bot-demo.mp4",
+    demoPoster: "/videos/grind-bot-demo.jpg",
   },
+];
+
+/** Automation and AI agents lead. Everything that reads this order — the strip,
+ *  the numbered index, the sheet's previous/next — follows from here, so the
+ *  numbering stays consistent wherever a project is shown. */
+export const PROJECTS: Project[] = [
+  ...ALL.filter((p) => p.group === "automation"),
+  ...ALL.filter((p) => p.group === "creative"),
 ];
 
 export interface Role {
@@ -255,7 +284,7 @@ export const PRINCIPLES = [
 
 export const STACK = [
   "TypeScript", "React", "Three.js", "React Three Fiber", "GLSL", "GSAP", "Motion", "Tailwind", "Vite", "Node.js",
-  "Cloudflare Pages", "WebCrypto", "Web Push", "Python", "Playwright", "Claude Agent SDK", "MCP", "n8n", "Make.com",
+  "Hostinger", "WebCrypto", "Web Push", "Python", "Playwright", "Claude Agent SDK", "MCP", "n8n", "Make.com",
   "SQL", "PostgreSQL", "Google Sheets API",
 ];
 

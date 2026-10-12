@@ -1,6 +1,6 @@
 import { motion, useReducedMotion } from "motion/react";
 import { ReelName } from "./ReelName";
-import { EMAIL, LINKS } from "../data/site";
+import { EMAIL, LINKS, NAME, PROFILE } from "../data/site";
 import { useApp } from "../lib/app";
 
 export function EmailCommand({ big = false }: { big?: boolean }) {
@@ -35,9 +35,7 @@ export function Hero() {
       <ReelName words={["IRFAN", "LONE"]} />
       <div className="mt-8 grid gap-8 md:mt-10 md:grid-cols-12 md:gap-10">
         <motion.p {...enter(1.1)} className="t-lede max-w-[38ch] text-muted md:col-span-7">
-          <span className="text-fg">Muhammad Irfan Lone.</span> Operations lead and automation engineer. I write the spec,
-          keep a small team on it, and then build the thing myself: AI agents that do the slow work while a person
-          stays in charge, and creative web in TypeScript, React and Three.js.
+          <span className="text-fg">{NAME}.</span> {PROFILE}
         </motion.p>
         <motion.div {...enter(1.25)} className="flex flex-col gap-3 md:col-span-5 md:pt-1">
           <EmailCommand />

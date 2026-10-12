@@ -113,7 +113,7 @@ export function Footer() {
         <span>Muhammad Irfan Lone, {new Date().getFullYear()}</span>
       </div>
       <p className="max-w-[60ch]">
-        Built with React, TypeScript, Tailwind and Motion, hosted on Cloudflare Pages. No trackers or cookies.
+        Built with React, TypeScript, Tailwind and Motion, hosted on Hostinger. No trackers or cookies.
         The demos use invented data.
       </p>
       </div>

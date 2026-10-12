@@ -1,7 +1,69 @@
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useEffect, useRef } from "react";
-import { PROJECTS } from "../data/site";
+import { useEffect, useRef, useState } from "react";
+import { PROJECTS, type Project } from "../data/site";
 import { useApp } from "../lib/app";
+
+type Cut = "demo" | "film";
+
+/** Where a project has both, the walkthrough leads: it shows the thing actually
+ *  working, which the launch film is not trying to do. */
+function SheetMedia({ p }: { p: Project }) {
+  const reduce = useReducedMotion();
+  const both = !!p.demoVideo && !!p.video;
+  const [cut, setCut] = useState<Cut>(p.demoVideo ? "demo" : "film");
+
+  // a different project means a different default
+  useEffect(() => setCut(p.demoVideo ? "demo" : "film"), [p.slug, p.demoVideo]);
+
+  const src = cut === "demo" ? p.demoVideo : p.video;
+  const poster = cut === "demo" ? (p.demoPoster ?? p.poster) : p.poster;
+
+  return (
+    <>
+      <motion.div
+        layoutId={reduce ? undefined : `media-${p.slug}`}
+        className="relative h-[min(56dvh,calc((100vw-48px)*0.5625))] overflow-hidden bg-black sm:m-3 sm:h-[min(56dvh,calc((min(100vw,1080px)-72px)*0.5625))] sm:rounded-[20px]"
+      >
+        {src ? (
+          <video
+            key={`${p.slug}-${cut}`}
+            src={src}
+            poster={poster}
+            controls
+            playsInline
+            autoPlay={!reduce}
+            className="absolute inset-0 size-full object-contain"
+            aria-label={`${p.name}, ${cut === "demo" ? "walkthrough" : "launch film"}`}
+          />
+        ) : (
+          <img src={poster} alt={`${p.name} screenshot`} className="absolute inset-0 size-full object-contain" />
+        )}
+      </motion.div>
+
+      {both && (
+        <div role="tablist" aria-label={`${p.name} video`} className="flex flex-wrap items-center gap-2 px-5 pt-1 sm:px-8">
+          {([["demo", "Walkthrough"], ["film", "Launch film"]] as const).map(([id, label]) => (
+            <button
+              key={id}
+              role="tab"
+              type="button"
+              aria-selected={cut === id}
+              onClick={() => setCut(id)}
+              className={`rounded-full px-4 py-1.5 text-[13px] font-semibold transition-colors ${
+                cut === id ? "bg-fg text-bg" : "border border-line text-muted hover:border-line-strong hover:text-fg"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+          <span className="text-[13px] text-faint">
+            {cut === "demo" ? "the real thing, step by step" : "made for the launch post"}
+          </span>
+        </div>
+      )}
+    </>
+  );
+}
 
 export function ProjectSheet() {
   const { openSlug, openProject } = useApp();
@@ -57,14 +119,7 @@ export function ProjectSheet() {
             transition={{ type: "spring", stiffness: 320, damping: 34 }}
             className="relative max-h-[92dvh] w-full max-w-[1080px] overflow-y-auto rounded-t-[28px] border border-line bg-bg sm:rounded-[28px]"
           >
-            <motion.div layoutId={reduce ? undefined : `media-${p.slug}`} className="relative h-[min(56dvh,calc((100vw-48px)*0.5625))] overflow-hidden bg-black sm:m-3 sm:h-[min(56dvh,calc((min(100vw,1080px)-72px)*0.5625))] sm:rounded-[20px]">
-              {p.video ? (
-                <video key={p.slug} src={p.video} poster={p.poster} controls playsInline autoPlay={!reduce}
-                  className="absolute inset-0 size-full object-contain" aria-label={`${p.name} launch video`} />
-              ) : (
-                <img src={p.poster} alt={`${p.name} screenshot`} className="absolute inset-0 size-full object-contain" />
-              )}
-            </motion.div>
+            <SheetMedia p={p} />
 
             <div className="grid gap-8 p-5 sm:p-8 md:grid-cols-12">
               <div className="md:col-span-7">

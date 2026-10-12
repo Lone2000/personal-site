@@ -29,15 +29,28 @@ function Card({ p, span, onOpen }: { p: Project; span: number; onOpen: () => voi
   const [live, setLive] = useState(false);   // has the video element been mounted yet
   const [playing, setPlaying] = useState(false);
 
+  const [want, setWant] = useState(false);   // should it be running right now
   const play = () => {
     if (!p.video || reduce) return;
     setLive(true);
-    requestAnimationFrame(() => vid.current?.play().then(() => setPlaying(true)).catch(() => {}));
+    setWant(true);
   };
   const stop = () => {
+    setWant(false);
     const v = vid.current; if (!v) return;
     v.pause(); setPlaying(false);
   };
+
+  // play only once the element is actually mounted. Calling play() in the same
+  // tick that sets `live` finds vid.current null, so the preview never started.
+  useEffect(() => {
+    if (!live || !want || reduce) return;
+    const v = vid.current;
+    if (!v) return;
+    let gone = false;
+    v.play().then(() => { if (!gone) setPlaying(true); }).catch(() => {});
+    return () => { gone = true; };
+  }, [live, want, reduce]);
 
   // phones and tablets: play while the card is mostly on screen
   useEffect(() => {

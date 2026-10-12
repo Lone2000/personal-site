@@ -1,6 +1,6 @@
 # irfanlone-site
 
-The personal site for Muhammad Irfan Lone, deployed to Cloudflare Pages at https://irfanlone.pages.dev. See `README.md` for setup and deploy steps. If this repo sits inside the bundle, the parent folder's `CLAUDE.md` has the full background.
+The personal site for Muhammad Irfan Lone, deployed to Hostinger at https://irfanlone.com, auto-deploying from `main`. See `README.md` for setup and deploy steps. If this repo sits inside the bundle, the parent folder's `CLAUDE.md` has the full background.
 
 ## Commands
 
@@ -22,19 +22,22 @@ Run `npm run build` before you say a change is done. It type-checks and fails on
 
 | File | What it is |
 |---|---|
-| `src/data/site.ts` | All copy: `PROJECTS`, `ROLES`, `PRINCIPLES`, `STACK`, `EDUCATION`, `LINKS`, `EMAIL`. Change content here, not in the components. |
+| `src/data/site.ts` | All copy: `PROJECTS`, `ROLES`, `PRINCIPLES`, `STACK`, `EDUCATION`, `LINKS`, `EMAIL`, `NAME`, `ROLE_LINE`, `LOCATION`, `PROFILE`. Change content here, not in the components. Projects are authored in `ALL`, then exported as `PROJECTS` **automation first**: the strip, the numbered index and the sheet's previous/next all read that one order, so numbering stays consistent. Reorder there, never in a component. |
+| `tools/og-source.html`, `tools/render-og.mjs` | How `public/og.png` is made. Run the dev server, then `node tools/render-og.mjs`. It stages the source into `public/`, shoots 1200×630, refuses to render if Archivo fell back to a system font, and cleans up. playwright-core is deliberately not a dependency (the host installs on every deploy) — pass `PLAYWRIGHT_CORE=<path>`. Re-render whenever the domain, the headline or the three posters change. |
+| `src/variants/` | Design variants (Ledger, Console, Reel) plus the review-only `Switcher`. Each only re-points the CSS tokens in `index.css`; all of them read `site.ts`. `registry.ts` sets `DEFAULT_VARIANT`, currently **`ledger`** — the chosen direction. Delete the other two once that is final. |
+| `src/variants/Ledger.tsx` | `Strip` is the drag rail under the hero: the centred frame plays its launch film, so the work moves before anyone clicks. `RowMedia` is the Demo / Launch film toggle inside an opened row. Keep the hero short enough that the strip stays near the fold. |
 | `src/lib/app.tsx` | App context: theme (stored in localStorage `il.theme`, set before paint by an inline script in `index.html`), island notices, `copyEmail`, the open project (hash `#work/<slug>`), and command-palette state with ⌘K, Ctrl K and `/` shortcuts. |
 | `src/components/ReelName.tsx` | The hero name as slot-machine reels. Spins once on load; hovering a letter spins it again. |
 | `src/components/Island.tsx` | The status pill. Opens on hover or focus, and shows "Email copied". |
 | `src/components/Nav.tsx` | Fixed header with a gradient fade. The header ignores pointer events and its children accept them. Also holds `Monogram`. |
 | `src/components/Hero.tsx` | The hero, plus `EmailCommand`, the copy button styled like a shell command. |
 | `src/components/Work.tsx` | Filter tabs and a 12-column bento grid. `SPANS` maps item count to column spans, and each row must sum to 12. Video previews play on mouse hover, or with IntersectionObserver on touch devices. |
-| `src/components/ProjectSheet.tsx` | Project dialog: video with sound, "Try this", "What's real", the stack, demo and source links. Supports ←/→ and Esc and traps focus. |
+| `src/components/ProjectSheet.tsx` | Project dialog: video with sound, "Try this", "What's real", the stack, demo and source links. Supports ←/→ and Esc and traps focus. `SheetMedia` shows a **Walkthrough / Launch film** toggle when the project has both, walkthrough first. Opened by a click it autoplays with sound (the click is the gesture the browser needs); reached by a deep link like `#work/grind-bot` it correctly shows the poster and a play button instead. |
 | `src/components/CommandPalette.tsx` | Search across projects, demos and actions. |
 | `src/components/Sections.tsx` | Principles, Experience, the stack marquee, Contact and Footer. |
 | `public/<slug>/` | The nine static demos, served as-is. Don't run them through Vite. |
-| `public/videos/` | Web-size MP4s and posters. |
-| `public/resume.pdf`, `public/og.png`, `public/favicon.svg`, `public/_headers` | Résumé, social preview image, favicon and Cloudflare headers. |
+| `public/videos/` | Web-size MP4s and posters. `<slug>.mp4` is the art-directed launch film; `<slug>-demo.mp4` is a plain walkthrough of the real thing. A project declares the second one with `demoVideo` / `demoPoster`, and Ledger then shows a Demo / Launch film toggle, walkthrough first. Only Grind Bot, PCI DSS and BrandVoice have both so far. |
+| `public/resume.pdf`, `public/og.png`, `public/favicon.svg`, `public/_headers` | Résumé, social preview image, favicon. `_headers` is Cloudflare-only and inert on Hostinger; `public/.htaccess` is the live one. |
 
 ## Design rules (keep them)
 
@@ -56,6 +59,6 @@ The demos use invented data only. Never add real names of other people, employer
 
 ## Open items
 
-- Deploy and confirm the `irfanlone` project name. If it changes, update canonical, og:url and og:image in `index.html`, and the résumé.
-- Check the hover video previews in a real browser. Headless Chromium can't play H.264.
+- ~~Deploy and confirm the project name.~~ Live at https://irfanlone.com on Hostinger, auto-deploying from `main`. If the domain ever changes, update four things: `index.html` (canonical, og:url, og:image), `tools/og-source.html` then re-render `og.png`, both résumés via `build_resume.py --base`, and `application/tekavra-dm.md`.
+- ~~Check the hover video previews.~~ Fixed and verified: `play()` was called in the same tick that mounted the `<video>`, so `vid.current` was null and the empty `.catch` hid it. Playwright's Chromium does decode H.264; only its bundled ffmpeg does not.
 - Decide whether the Feels Like Today "Longing" room stays public. It has personal lines.

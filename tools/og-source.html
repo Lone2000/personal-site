@@ -1,0 +1,90 @@
+<!doctype html>
+<!-- Source for public/og.png, the card LinkedIn and X show for a bare link.
+     Render it with tools/render-og.mjs, which copies this into public/ so the
+     dev server resolves the font and posters, shoots 1200x630, then cleans up.
+     Re-render whenever the domain, the name line, or the three posters change. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face {
+    font-family: "Archivo Variable";
+    src: url("/node_modules/@fontsource-variable/archivo/files/archivo-latin-standard-normal.woff2") format("woff2");
+    font-weight: 100 900;
+    font-stretch: 62% 125%;
+    font-display: block;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1200px; height: 630px; }
+  body {
+    background: #faf7f1;
+    color: #1b1915;
+    font-family: "Archivo Variable", sans-serif;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+  .accent-rule { height: 5px; background: #9a6210; flex: none; }
+  .top {
+    padding: 40px 60px 0;
+    flex: none;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 40px;
+  }
+  h1 {
+    font-weight: 800;
+    font-stretch: 70%;
+    font-size: 110px;
+    line-height: 0.86;
+    letter-spacing: -0.022em;
+    text-transform: uppercase;
+  }
+  .url { text-align: right; padding-top: 10px; flex: none; }
+  .url .big { font-size: 25px; font-weight: 800; font-stretch: 78%; color: #9a6210; }
+  .url .small { margin-top: 7px; font-size: 16px; color: #5a554d; line-height: 1.5; }
+  .lines { padding: 18px 60px 0; flex: none; }
+  .role { color: #9a6210; font-size: 22px; font-weight: 700; font-stretch: 92%; }
+  .meta { margin-top: 12px; color: #5a554d; font-size: 20px; font-stretch: 100%; }
+  .meta b { color: #1b1915; font-weight: 700; }
+  .strip {
+    margin-top: auto;
+    display: flex;
+    gap: 14px;
+    padding: 0 60px 44px;
+    flex: none;
+  }
+  .frame {
+    width: 320px;
+    height: 200px;
+    border: 1px solid rgba(27, 25, 21, 0.16);
+    border-radius: 3px;
+    overflow: hidden;
+    background: #e7dfd0;
+    flex: none;
+  }
+  .frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+</style>
+</head>
+<body>
+  <div class="accent-rule"></div>
+  <div class="top">
+    <h1>Muhammad<br>Irfan Lone</h1>
+    <div class="url">
+      <div class="big">irfanlone.com</div>
+      <div class="small">Remote · EU/UK hours</div>
+    </div>
+  </div>
+  <div class="lines">
+    <p class="role">Creative developer · TypeScript, React, Three.js · Automation and AI agents</p>
+    <p class="meta"><b>Eleven live demos</b> you can open and use, each with a launch film.</p>
+  </div>
+  <div class="strip">
+    <div class="frame"><img src="/videos/vectraview-qa-bot.jpg" alt=""></div>
+    <div class="frame"><img src="/videos/pci-dss-control-extractor.jpg" alt=""></div>
+    <div class="frame"><img src="/videos/feels-like-today.jpg" alt=""></div>
+  </div>
+</body>
+</html>
